@@ -66,8 +66,6 @@ public class AddToCartWithSignedInUser {
     	
     	womenPage = new WomenMenuPage(driver);
     	womenPage.clickOnProductByProductNumber(1);
-    	
-    	
     	productView = new ProductDescriptionPage(driver);
     	//Assertion to check if the product selected has correct name?
     	String producName = productView.getProductName();
@@ -76,13 +74,12 @@ public class AddToCartWithSignedInUser {
     	
     	productAdded = new ProductAddedToCartPage(driver);
     	productAdded.waitForProductAddedToCartPageToAppear();
-//    	Thread.sleep(3000);
     	productAdded.clickProceedToCheckout();
     	
     	sAssert.assertAll();
     }
     
-    @AfterTest
+//    @AfterTest
     public void tearDown(){
     	driver.quit();
     }

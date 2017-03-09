@@ -48,7 +48,7 @@ public class ProductListingPage {
 	 */
 	public void clickOnProductByProductNumber(int productNumber){
 		wait = new WebDriverWait(driver, 60);
-		WebElement element = driver.findElement(By.xpath("//ul[@class='product_list grid row']/li["+productNumber+"]//img"));
+		WebElement element = driver.findElement(By.xpath("//ul[@class='product_list grid row']/li["+productNumber+"]//a[@class='product-name']"));
 		wait.until(ExpectedConditions.visibilityOf(element));
 		element.click();
 	}
