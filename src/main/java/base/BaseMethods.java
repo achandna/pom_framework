@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.bcel.generic.RETURN;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
@@ -70,16 +71,23 @@ public class BaseMethods {
 	WebElement dateWidget;
 	List<WebElement> rows;
 	List<WebElement> columns;
-
 	static String fileInput = "config.properties";
 	static String browserSelected = getDataFromPropertyFile("browser").trim();
 
+	
+	static Logger logger = LogManager.getLogger(BaseMethods.class);
+		
+	/**
+	 * Return instance of browser from openBrowser() method
+	 * @return
+	 * driver
+	 */
 	public static WebDriver getDriver() {
 		return driver;
 	}
 
-	static Logger logger = LogManager.getLogger(BaseMethods.class);
-
+	
+		
 	@BeforeTest
 	public void setUp() throws Exception {
 
@@ -94,21 +102,34 @@ public class BaseMethods {
 		driver.quit();
 	}
 
+	/**
+	 * Reads property from a file of the parameter is given in arguments
+	 * @param variableName
+	 * @return
+	 * Value of a parameter passed from the file
+	 */
 	public static String getDataFromPropertyFile(String variableName) {
-
 		String value = null;
 		try (FileReader reader = new FileReader(fileInput)) {
 			Properties properties = new Properties();
 			properties.load(reader);
 			value = properties.getProperty(variableName);
-			System.out.println("value>>>"+value);
+			//logger.info("value>>>"+value);
 		} catch (IOException e) {
-			System.out.println("config.properties not found");
+			logger.error("config.properties not found");
 			e.printStackTrace();
 		}
 		return value.trim();
 
 	}
+	
+	/**
+	 * Reads appURL from config field
+	 *  
+	 * @return
+	 * @throws InterruptedException
+	 * @throws IOException
+	 */
 
 	public String openUrl() throws InterruptedException, IOException {
 		String url = null;
@@ -128,6 +149,13 @@ public class BaseMethods {
 
 	}
 
+	/**
+	 * Run on a specific browser which is specified in config.properties 
+	 * 
+	 * @return
+	 * @throws InterruptedException
+	 * @throws MalformedURLException
+	 */
 
 	public static WebDriver openBrowser() throws InterruptedException, MalformedURLException {
 		System.out.println("Method called: openBrowser");
@@ -260,11 +288,18 @@ public class BaseMethods {
 
 		}
 	}
-
+	/**
+	 * Fetch current URL
+	 * @return
+	 */
 	public String getCurUrl() {
 		return driver.getCurrentUrl();
 
 	}
+	/**
+	 *  
+	 * @param navURL
+	 */
 
 	public void navigateTo(String navURL) {
 		driver.navigate().to(navURL);

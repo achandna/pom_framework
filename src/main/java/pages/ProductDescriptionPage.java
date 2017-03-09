@@ -9,17 +9,25 @@ public class ProductDescriptionPage {
 		this.driver = driver;
 	}
 	
-	//Click on add to cart button
+	/**
+	 * Click on add to cart button
+	 */
 	public void clickAddToCart(){
 		driver.findElement(By.xpath("//p[@id= 'add_to_cart']//button")).click();
 	}
 	
-	//Click on Send to friend button
+	/**
+	 * Click on Send to friend button
+	 */
 	public void clickSendToFriend(){
 		driver.findElement(By.id("send_friend_button")).click();
 	}
 	
-	// get product Name
+	/**
+	 *  get product Name
+	 * @return
+	 * 
+	 */
 	public String getProductName(){
 		return driver.findElement(By.xpath("//h1[@itemprop='name']")).getText();
 	}
