@@ -7,6 +7,7 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
@@ -79,6 +80,11 @@ public class AddToCartWithSignedInUser {
     	productAdded.clickProceedToCheckout();
     	
     	sAssert.assertAll();
+    }
+    
+    @AfterTest
+    public void tearDown(){
+    	driver.quit();
     }
 	
     
