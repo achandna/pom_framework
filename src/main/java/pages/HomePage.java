@@ -13,7 +13,10 @@ public class HomePage {
 		this.driver = driver;
 	}
 	
-	// To click the sign in button present on the Index page
+	/**
+	* To click the sign in button present on the Index page
+	* @param: no parameters are required
+	*/ 
 	public void clickSignIn(){
 		System.out.println("I am in clickSignIn");
 		driver.findElement(By.className("login")).click();
