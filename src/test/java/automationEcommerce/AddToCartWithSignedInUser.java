@@ -3,6 +3,8 @@ package automationEcommerce;
 import java.net.MalformedURLException;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.BeforeTest;
@@ -28,13 +30,14 @@ public class AddToCartWithSignedInUser {
 	WomenMenuPage womenPage;
 	ProductDescriptionPage productView;
 	ProductAddedToCartPage productAdded;
-	
+	static Logger logger = LogManager.getLogger(BaseMethods.class);
 	
     @BeforeTest
 
     public void setup() throws InterruptedException, MalformedURLException{
     	
     	driver = BaseMethods.openBrowser();
+    	
     	
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 
@@ -47,9 +50,9 @@ public class AddToCartWithSignedInUser {
     	
     	SoftAssert sAssert = new SoftAssert();
     	
-    	homepage = new HomePage(driver); 
+    	homepage = new HomePage(driver);
     	homepage.clickSignIn();
-    	
+    	    	
     	login = new Login(driver);
     	login.enterEmailforSignIn(BaseMethods.getDataFromPropertyFile("emailId"));
     	login.enterPassword(BaseMethods.getDataFromPropertyFile("password"));
