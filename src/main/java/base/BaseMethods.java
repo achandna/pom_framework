@@ -17,8 +17,7 @@ import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.bcel.generic.RETURN;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.apache.log4j.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.NoSuchElementException;
@@ -64,8 +63,16 @@ import jxl.Sheet;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
 
-public class BaseMethods {
+/**
+ * This class is a generic class where all generic methods are written.
+ * 
+ * @author karan
+ *
+ */
 
+public class BaseMethods {
+	
+	static Logger logger = Logger.getLogger(BaseMethods.class);
 	protected static WebDriver driver;
 	Select select;
 	WebElement dateWidget;
@@ -75,7 +82,7 @@ public class BaseMethods {
 	static String browserSelected = getDataFromPropertyFile("browser").trim();
 
 	
-	static Logger logger = LogManager.getLogger(BaseMethods.class);
+	
 		
 	/**
 	 * Return instance of browser from openBrowser() method
@@ -114,7 +121,7 @@ public class BaseMethods {
 			Properties properties = new Properties();
 			properties.load(reader);
 			value = properties.getProperty(variableName);
-			//logger.info("value>>>"+value);
+			logger.info(variableName+" : "+"value : "+value);
 		} catch (IOException e) {
 			logger.error("config.properties not found");
 			e.printStackTrace();
@@ -139,10 +146,10 @@ public class BaseMethods {
 			Properties properties = new Properties();
 			properties.load(reader);
 			url = properties.getProperty("baseURL");
-			System.out.println(url);
+			logger.info("URL : "+url);
 
 		} catch (IOException e) {
-			System.out.println("config.properties not found");
+			logger.error("config.properties not found");
 			e.printStackTrace();
 		}
 		return url;
@@ -161,30 +168,33 @@ public class BaseMethods {
 		System.out.println("Method called: openBrowser");
 		try{
 			driver = null;
-			System.out.println("Browser selected: "+browserSelected);
+			logger.info("Browser selected : "+browserSelected);
 			if (browserSelected.equalsIgnoreCase("firefox")) {
+				logger.info("Launching firefox browser");
 				File pathToBinary = new File("/home/abhishek/firefox/firefox");
 				FirefoxBinary ffBinary = new FirefoxBinary(pathToBinary);
 				FirefoxProfile firefoxProfile = new FirefoxProfile();       
 				driver = new FirefoxDriver(ffBinary,firefoxProfile);
-				System.out.println("firefox selected");
+				//logger.info("firefox selected");
 				// Code needs to be written to select chrome, IE and other browsers.
 			} else if (browserSelected.equalsIgnoreCase("chrome")) {
-				System.out.println("launching chrome browser");
+				logger.info("launching chrome browser");
 				System.setProperty("webdriver.chrome.driver", "ChromeDriver/chromedriver");
 				driver = new ChromeDriver();
-				logger.info("Opened browser is chrome");
+				//logger.info("Opened browser is chrome");
 			} else if (browserSelected.equalsIgnoreCase("phantom")) {
+				logger.info("launching phantom browser");
 				Capabilities caps = new DesiredCapabilities();
 				((DesiredCapabilities) caps).setJavascriptEnabled(true);
 				((DesiredCapabilities) caps).setCapability("takesScreenshot", true);
 				((DesiredCapabilities) caps).setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY,"/home/abhishek/Documents/anil/phantomjs/bin/phantomjs");
 				driver = new PhantomJSDriver(caps);
-				logger.info("opened browser is phantom");
+				//logger.info("opened browser is phantom");
 
 			} else if (browserSelected.equalsIgnoreCase("browserstack")) {
+				logger.info("launching browserstack");
 				String URL = "https://" + getDataFromPropertyFile("bsUserName") + ":" + getDataFromPropertyFile("bsKey") + "@hub-cloud.browserstack.com/wd/hub";
-				System.out.println("URL>>>"+URL);
+				System.out.println("URL : "+URL);
 			    DesiredCapabilities caps = new DesiredCapabilities();
 			    caps.setCapability("browser", "Chrome");
 			    caps.setCapability("browser_version", "56");
@@ -202,11 +212,11 @@ public class BaseMethods {
 			}
 			driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 			driver.manage().window().maximize();
-			System.out.println("Browser Selected :--");
+			logger.info("Browser Selected :-- "+browserSelected);
 
 		} catch (WebDriverException e) {
 			e.printStackTrace();
-			System.out.println("There is some problem with browser config");
+			logger.error("There is some problem with browser config");
 		}
 		return driver;
 
@@ -267,7 +277,7 @@ public class BaseMethods {
 			select = new Select(mon);
 			select.selectByVisibleText(month);
 		} else {
-			System.out.println(mon + "is not visible in headless mode");
+			logger.info(mon + "is not visible in headless mode");
 		}
 
 		select = new Select(driver.findElement(By.cssSelector(".ui-datepicker-year")));

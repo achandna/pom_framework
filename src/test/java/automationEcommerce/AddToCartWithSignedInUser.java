@@ -23,7 +23,7 @@ import base.BaseMethods;
 
 
 public class AddToCartWithSignedInUser {
-	
+	static Logger logger = Logger.getLogger(AddToCartWithSignedInUser.class);
 	WebDriver driver;
 	HomePage homepage;
 	Login login;
@@ -31,12 +31,12 @@ public class AddToCartWithSignedInUser {
 	WomenMenuPage womenPage;
 	ProductDescriptionPage productView;
 	ProductAddedToCartPage productAdded;
-	static Logger logger = LogManager.getLogger(BaseMethods.class);
+	
 	
     @BeforeTest
 
     public void setup() throws InterruptedException, MalformedURLException{
-    	
+    	    	
     	driver = BaseMethods.openBrowser();
     	
     	
@@ -45,6 +45,12 @@ public class AddToCartWithSignedInUser {
         driver.get(BaseMethods.getDataFromPropertyFile("appURL"));
 
     }
+    
+    /**
+     * This method adds product to cart through quick view
+     * 
+     * @throws InterruptedException
+     */
     
     @Test
     public void addToCartThroughQuickView() throws InterruptedException{

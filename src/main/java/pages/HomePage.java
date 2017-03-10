@@ -10,7 +10,7 @@ import base.BaseMethods;
 public class HomePage {
 	
 	static WebDriver driver;
-	static Logger logger = LogManager.getLogger(BaseMethods.class);
+	static Logger logger = Logger.getLogger(HomePage.class);
 	
 	/**
 	 * This constructor is to get Instance of driver to the Homepage class.

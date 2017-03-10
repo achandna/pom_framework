@@ -1,0 +1,14 @@
+INFO - browser : value : chrome
+INFO - Browser selected : chrome
+INFO - launching chrome browser
+INFO - Browser Selected :-- chrome
+INFO - appURL : value : http://automationpractice.com
+INFO - I am in clickSignIn
+INFO - emailId : value : chandna.anil@gmail.com
+INFO - password : value : everything
+INFO - browser : value : chrome
+INFO - Browser selected : chrome
+INFO - launching chrome browser
+INFO - Browser Selected :-- chrome
+INFO - appURL : value : http://automationpractice.com
+INFO - I am in clickSignIn
