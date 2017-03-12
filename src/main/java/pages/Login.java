@@ -1,12 +1,13 @@
 package pages;
 
+import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 public class Login {
 	
 	static WebDriver driver;
-	
+	static Logger logger = Logger.getLogger(Login.class);
 	/**
 	 * Defined constructor for Login page
 	 * @param driver
@@ -20,6 +21,7 @@ public class Login {
 	 * @param emailId
 	 */
 	public void enterEmailforSignIn(String emailId){
+		logger.info("User enters his email id:"+emailId);
 		driver.findElement(By.id("email")).sendKeys(emailId);
 	}
 	
@@ -28,6 +30,7 @@ public class Login {
 	 * @param password
 	 */
 	public void enterPassword(String password){
+		logger.info("USer enters password");
 		driver.findElement(By.id("passwd")).sendKeys(password);
 	}
 	
@@ -35,6 +38,7 @@ public class Login {
 	 *  click SignIn button to Sign In
 	 */
 	public void clickSignInButton(){
+		logger.info("User clicks on submit login button");
 		driver.findElement(By.id("SubmitLogin")).click();
 	}
 	
