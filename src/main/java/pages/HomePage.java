@@ -1,16 +1,13 @@
 package pages;
 
-import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-
-import base.BaseMethods; 
+import org.openqa.selenium.WebDriver; 
 
 public class HomePage {
 	
 	static WebDriver driver;
-	static Logger logger = LogManager.getLogger(BaseMethods.class);
+	static Logger logger = Logger.getLogger(HomePage.class);
 	
 	/**
 	 * This constructor is to get Instance of driver to the Homepage class.
@@ -41,6 +38,7 @@ public class HomePage {
 	 * To click Women Menu link present in the menu
 	 */
 	public void clickWomanMenu(){
+		logger.info("User clicks on Woman Menu");
 		driver.findElement(By.xpath("//a[@title = 'Women']")).click();
 	}
 	
@@ -50,6 +48,7 @@ public class HomePage {
 	 * String if Account Name exists, otherwise NULL
 	 */
 	public String verifyAccountName(){
+		logger.info("User wants to verify account name");
 		return driver.findElement(By.xpath("//a[@class='account']/span")).getText();
 		
 	}
@@ -59,6 +58,7 @@ public class HomePage {
 	 * @return
 	 */
 	public String verifyCorrectUserLoggedIn(){
+		logger.info("User wants to verify account name");
 		return verifyAccountName();
 	}
 	
