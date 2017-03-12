@@ -25,7 +25,7 @@ public class HomePage {
 	* To click the sign in button present on the Index page
 	* @param: no parameters are required
 	*/ 
-	public void clickSignIn(){
+	public void clickSignInLink(){
 		logger.info("I am in clickSignIn");
 		driver.findElement(By.className("login")).click();
 	}

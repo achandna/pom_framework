@@ -51,9 +51,11 @@ public class AddToCartWithSignedInUser {
     	
     	SoftAssert sAssert = new SoftAssert();
     	
+    	//Click on sign in link
     	homepage = new HomePage(driver);
-    	homepage.clickSignIn();
-    	    	
+    	homepage.clickSignInLink();
+    	
+    	//Login to application
     	login = new Login(driver);
     	login.enterEmailforSignIn(BaseMethods.getDataFromPropertyFile("emailId"));
     	login.enterPassword(BaseMethods.getDataFromPropertyFile("password"));
@@ -62,16 +64,21 @@ public class AddToCartWithSignedInUser {
     	String userName = homepage.verifyAccountName();
     	//Assertion to check if correct user is logged in
     	sAssert.assertTrue(userName.equals("Anil Chandna"), "User account Name did not match.\n Expected Name is:"+"Anil Chandna"+"\nActual UserName is:"+userName);
+    	
+    	//Click on Women menu link
     	homepage.clickWomanMenu();
     	
+    	// Click on product 1 from listing and reach to product view page
     	womenPage = new WomenMenuPage(driver);
     	womenPage.clickOnProductByProductNumber(1);
     	productView = new ProductDescriptionPage(driver);
+    	
     	//Assertion to check if the product selected has correct name?
     	String producName = productView.getProductName();
     	sAssert.assertTrue(producName.equals("Faded Short Sleeve T-shirts"), "The expected name of the product does not match with the actual\nexpected:"+"Faded Short Sleeve T-shirts"+"\nactual:"+producName);
-    	productView.clickAddToCart();
     	
+    	//Click on Add  to cart
+    	productView.clickAddToCart();
     	productAdded = new ProductAddedToCartPage(driver);
     	productAdded.waitForProductAddedToCartPageToAppear();
     	productAdded.clickProceedToCheckout();
