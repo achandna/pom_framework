@@ -22,7 +22,7 @@ import base.BaseMethods;
 
 
 
-public class AddToCartWithSignedInUser {
+public class AddToCartWithSignedInUser extends BaseMethods{
 	static Logger logger = Logger.getLogger(AddToCartWithSignedInUser.class);
 	WebDriver driver;
 	HomePage homepage;
@@ -32,6 +32,13 @@ public class AddToCartWithSignedInUser {
 	ProductDescriptionPage productView;
 	ProductAddedToCartPage productAdded;
 	
+    String email = getVariableFromXML("email");
+    
+    String password = getVariableFromXML("password");
+    
+    String expectedUsername = getVariableFromXML("username");
+    
+    String expectedProducName = getVariableFromXML("productName");
 	
     @BeforeTest
 
@@ -39,10 +46,10 @@ public class AddToCartWithSignedInUser {
     	    	
     	driver = BaseMethods.openBrowser();
     	
-    	
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 
         driver.get(BaseMethods.getDataFromPropertyFile("appURL"));
+
 
     }
     
@@ -63,13 +70,13 @@ public class AddToCartWithSignedInUser {
     	
     	//Login to application
     	login = new Login(driver);
-    	login.enterEmailforSignIn(BaseMethods.getDataFromPropertyFile("emailId"));
-    	login.enterPassword(BaseMethods.getDataFromPropertyFile("password"));
+    	login.enterEmailforSignIn(email);
+    	login.enterPassword(password);
     	login.clickSignInButton();
     	
     	String userName = homepage.verifyAccountName();
     	//Assertion to check if correct user is logged in
-    	sAssert.assertTrue(userName.equals("Anil Chandna"), "User account Name did not match.\n Expected Name is:"+"Anil Chandna"+"\nActual UserName is:"+userName);
+    	sAssert.assertTrue(userName.equals(expectedUsername), "User account Name did not match.\n Expected Name is:"+expectedUsername+"\nActual UserName is:"+userName);
     	
     	//Click on Women menu link
     	homepage.clickWomanMenu();
@@ -81,7 +88,7 @@ public class AddToCartWithSignedInUser {
     	
     	//Assertion to check if the product selected has correct name?
     	String producName = productView.getProductName();
-    	sAssert.assertTrue(producName.equals("Faded Short Sleeve T-shirts"), "The expected name of the product does not match with the actual\nexpected:"+"Faded Short Sleeve T-shirts"+"\nactual:"+producName);
+    	sAssert.assertTrue(expectedProducName.equals(producName), "The expected name of the product does not match with the actual\nexpected:"+expectedProducName+"\nactual:"+producName);
     	
     	//Click on Add  to cart
     	productView.clickAddToCart();

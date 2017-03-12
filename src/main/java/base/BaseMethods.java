@@ -12,12 +12,17 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.bcel.generic.RETURN;
 import org.apache.log4j.*;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.input.SAXBuilder;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.NoSuchElementException;
@@ -56,6 +61,11 @@ import com.gargoylesoftware.htmlunit.BrowserVersion;
 
 
 
+
+
+
+
+
 //import io.github.bonigarcia.wdm.ChromeDriverManager;
 //import io.github.bonigarcia.wdm.MarionetteDriverManager;
 //import io.github.bonigarcia.wdm.PhantomJsDriverManager;
@@ -74,6 +84,8 @@ public class BaseMethods {
 	
 	static Logger logger = Logger.getLogger(BaseMethods.class);
 	protected static WebDriver driver;
+	private String selectDataSet=null;
+	private int datasetIndex=0;
 	Select select;
 	WebElement dateWidget;
 	List<WebElement> rows;
@@ -95,7 +107,7 @@ public class BaseMethods {
 
 	
 		
-	@BeforeTest
+//	@BeforeTest
 	public void setUp() throws Exception {
 
 		openBrowser();
@@ -104,7 +116,7 @@ public class BaseMethods {
 		driver.manage().window().maximize();
 	}
 
-	@AfterTest
+//	@AfterTest
 	public void quitTest() {
 		driver.quit();
 	}
@@ -364,5 +376,159 @@ public class BaseMethods {
 		}
 		return arrayExcelData;
 	}
+	
+	/*
+	 * This function will fetch the dataset value to be used for 'getVariableFromXML' and 'getListVariableFromXML' methods
+	 */
+	public String getSelectDataSet() {
+		return selectDataSet;
+	}
+	
+	
+	/*
+	 * it will set the value of dataset to be choosen for variable and listVariables
+	 */
+
+	public void setSelectDataSet(String selectDataSet) {
+		this.selectDataSet = selectDataSet;
+	}
+
+
+	/*
+	 * This function will fetch the index of the dataset to be used for 'getVariableFromXML' and 'getListVariableFromXML' methods
+	 */
+	public int getDataSetValue() {
+		return datasetIndex;
+	}
+
+	/*
+	 * it will set the index of variable and listVariables data to be used
+	 */
+	public void setDataSetValue(int datasetIndex) {
+		this.datasetIndex = datasetIndex;
+	}
+
+
+
+	
+	/*
+	 * This function will return the String Value.
+	 * We just need to keep the variable name to be fetched in code as the tag name in xml file.
+	 * Example :-	
+	 	<variable dataset="test1">
+			<titleName>Node 2</titleName>
+			<name>Name Of The Movie</name>
+		</variable>
+		titleName,name will be the variable name from which we are going to fetch data
+		getVariableFromXML("name") will return 'Name Of The Movie' value.
+	 * 
+	 * dataset is used for fetching the data frrom specific dataset. for example :- we might have many dataset in xml and we want to fetch
+	 * data from dataset='test' , so, in this case, it will ignore rest of the datasets and will pick the data from 'test' dataset only.
+	 * 
+	 */
+	public String getVariableFromXML(String variableName) {
+		 
+		  SAXBuilder builder = new SAXBuilder();
+		  String className=this.getClass().getSimpleName();
+		  className=className.concat(".xml");
+		  String xmlFileName = this.getClass().getResource(className).getPath();
+		  System.out.println("digesting input file --->>>>>"+xmlFileName);
+		  File xmlFile = new File(xmlFileName);  
+		  String nodeValue=null;
+		  if(xmlFile.exists()){
+		  try {
+			  
+	 		Document document = (Document) builder.build(xmlFile);
+			Element rootNode = document.getRootElement();
+			//System.out.println(rootNode.getChild("variable").getAttribute("dataset").getValue());
+			List list = rootNode.getChildren("variable");
+			
+			for(int temp=0;temp<list.size();temp++){
+				Element node =(Element) list.get(temp);
+				if(node.hasAttributes()){
+				if(node.getAttribute("dataset").getValue().toString().equals(selectDataSet)){
+					datasetIndex=temp;
+					System.out.println("try");
+					break;
+				}
+				}
+			}
+			System.out.println(datasetIndex);
+			Element node = (Element) list.get(datasetIndex);
+			nodeValue=node.getChild(variableName).getValue();
+			
+
+			} catch (IOException io) {
+			System.out.println(io.getMessage());
+		  } catch (JDOMException jdomex) {
+			System.out.println(jdomex.getMessage());
+		  }
+		  }
+		  else
+			  System.out.println("Throw Error"); //We need to create exception here
+		  return nodeValue;
+		}
+	
+	
+	/*
+	 * The below given method will return the list of the variable included in "listVariable" node.
+	 * And will get the child tags(only <var>)into the list
+	 * Example :-
+	 * 	<listVariable dataset="test1">
+		<list1>
+			<var>value1</var>
+			<var>value2</var>
+		</list1>
+		</listVariable>
+	 *  In this xml file, list1 is the variable name and passing this variable name will get all the child element value with var tag into
+	 *  a list and will return that list.
+	 *  
+	 *  dataset  value will define like, from which listVariable data, we are planning to get data.
+	 *  we can set it by function  "setSelectDataSet(String selectDataSet)"
+	 *  If, we don't use this function, data will get fetched from first listVariable available in xml file
+	 */
+	
+	public ArrayList<String> getListFromXMLTest(String listVariableName) {
+		  SAXBuilder builder = new SAXBuilder();
+		  String className=this.getClass().getSimpleName();
+		  className=className.concat(".xml");
+		  String xmlFileName = this.getClass().getResource(className).getPath();
+		  File xmlFile = new File(xmlFileName);  
+		  String nodeValue=null;
+		  ArrayList<String> listOfData = new ArrayList<String>();
+		  if(xmlFile.exists()){
+		  try {
+	 		Document document = (Document) builder.build(xmlFile);
+			Element rootNode = document.getRootElement();
+			List list = rootNode.getChildren("listVariable");
+			for(int temp=0;temp<list.size();temp++){
+				Element node =(Element) list.get(temp);
+				if(node.hasAttributes()){
+				if(node.getAttribute("dataset").getValue().toString().equals(selectDataSet)){
+					datasetIndex=temp;
+					break;
+				}
+				}
+			}
+			Element variableNode = (Element) list.get(datasetIndex);
+			variableNode=variableNode.getChild(listVariableName);
+			List<Element> listChild = variableNode.getChildren("var");
+			for(int temp1=0;temp1<listChild.size();temp1++){
+				Element node1=(Element) listChild.get(temp1);
+				listOfData.add(temp1, node1.getValue());
+			}
+			
+
+			} catch (IOException io) {
+			System.out.println(io.getMessage());
+		  } catch (JDOMException jdomex) {
+			System.out.println(jdomex.getMessage());
+		  }
+		  }
+		  else
+			  System.out.println("Throw Error"); //We need to create exception here
+		  return listOfData;
+		}
+
 
 }

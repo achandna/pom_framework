@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataelements>
+	<variable>
+	<password>everything</password>
+    <email>chandna.anil@gmail.com</email>
+    <username>Anil Chandna</username>
+    <productName>Faded Short Sleeve T-shirts</productName>
+    
+    
+	</variable>
+	
+	<listVariable>
+		<fieldNameStep1>
+			<var>Jurisdiction</var>
+			<var>Case Name</var>
+			<var>Case Number</var>
+			<var>What needs to be transcribed?</var>
+			<var>Estimated length</var>
+			<var>Hearing date</var>
+		</fieldNameStep1>	
+		
+		<fieldNameStep2>
+			<var>Project ID</var>
+			<var>Estimated Cost</var>
+			<var>Estimated Pages</var>
+			<var>Due Date and Due Time</var>
+		</fieldNameStep2>
+		
+	</listVariable>
+
+	
+	
+</dataelements>
